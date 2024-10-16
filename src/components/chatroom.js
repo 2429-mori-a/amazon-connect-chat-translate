@@ -18,11 +18,12 @@ const Chatroom = (props) => {
     
     function getKeyByValue(object) {
         let obj = languageTranslate.find(o => o.contactId === currentContactId[0]);
-        if (obj === undefined || !obj.lang) {
-            return 'N/A'; // 適切なデフォルト値を設定
-        } else {
-            return Object.keys(object).find(key => object[key] === obj.lang);
+        if(obj === undefined) {
+            return
+          } else {
+                return Object.keys(object).find(key => object[key] === obj.lang);
         }
+        
     }
 
     const sendMessage = async(session, content) => {
@@ -35,98 +36,102 @@ const Chatroom = (props) => {
     }
 
     useEffect(() => {
-        // 自動スクロール機能
+
+        // this ensures that the chat window will auto scoll to ensure the more recent message is in view
         if (messageEl) {
             messageEl.current.addEventListener('DOMNodeInserted', event => {
                 const { currentTarget: target } = event;
                 target.scroll({ top: target.scrollHeight, behavior: 'smooth' });
             });
         }
-        // フォーカスを常に入力欄に当てる
+        // this ensure that the input box has the focus on load and after each entry
         input.current.focus();
     }, []);
 
+
     async function handleSubmit(event) {
         event.preventDefault();
-        // チャット入力欄が空なら何もしない
+        // if there is no text in the the chat input box, do nothing.
         if (newMessage === "") {
             return;
         }
-
-        // 現在のコンタクトに対応する翻訳言語を取得
         let destLang = languageTranslate.find(o => o.contactId === currentContactId[0]);
-        
-        if (!destLang || !destLang.lang) {
-            console.error("No destination language found or language is undefined for the current contact.");
-            return;
-        }
-
         console.log("destLang: ", destLang);
 
-        // エージェントのメッセージを翻訳
+        // translate the agent message  ** Swap the below two round if you wnat to test custom termonologies **
+        // let translatedMessage = await translateText(newMessage, 'en', destLang.lang);
+
+        /***********************************CUSTOM TERMINOLOGY*************************************************    
+         
+            To support custom terminologies comment out the line above, and uncomment the below 2 lines 
+         
+         ******************************************************************************************************/
         console.log(newMessage);
-        let translatedMessageAPI = await translateTextAPI(newMessage, 'en', destLang.lang); // 外部のカスタム用語集を提供
-        let translatedMessage = translatedMessageAPI.TranslatedText;
+        let translatedMessageAPI = await translateTextAPI(newMessage, 'en', destLang.lang); // Provide a custom terminology created outside of this deployment
+        //let translatedMessageAPI = await translateTextAPI(newMessage, 'en', destLang.lang, ['connectChatTranslate']); // Provide a custom terminology created outside of this deployment
+        let translatedMessage = translatedMessageAPI.TranslatedText
 
         console.log(` Original Message: ` + newMessage + `\n Translated Message: ` + translatedMessage);
-
-        // チャットに追加する新しいメッセージを作成
+        // create the new message to add to Chats.
         let data2 = {
             contactId: currentContactId[0],
             username: agentUsername,
             content: <p>{newMessage}</p>,
-            translatedMessage: <p>{translatedMessage}</p>, // カスタム用語集使用時は {translatedMessage.TranslatedText} に設定
+            translatedMessage: <p>{translatedMessage}</p>, // set to {translatedMessage.TranslatedText} if using custom terminologies
         };
-
-        // 新しいメッセージをストアに追加
+        // add the new message to the store
         addChat(prevMsg => [...prevMsg, data2]);
-
-        // チャット入力欄をクリア
+        // clear the chat input box
         setNewMessage("");
 
-        // セッションを取得してメッセージ送信
+        
+        
         const session = retrieveValue(currentContactId[0]);
 
-        function retrieveValue(key) {
+        function retrieveValue(key){
             var value = "";
-            for (var obj in props.session) {
-                for (var item in props.session[obj]) {
-                    if (item === key) {
-                        value = props.session[obj][item];
-                        break;
-                    }
+            for(var obj in props.session) {
+            for(var item in props.session[obj]) {
+                if(item === key) {
+                    value = props.session[obj][item];
+                    break;
                 }
+            }
             }
             return value;
         }
-
         sendMessage(session, translatedMessage);
     }
 
+
+
     return (
         <div className="chatroom">
-            <h3>Translate - ({languageTranslate.map(lang => {if(lang.contactId === currentContactId[0])return lang.lang})}) {getKeyByValue(languageOptions)}</h3>
-            <ul className="chats" ref={messageEl}>
+                <h3>Translate - ({languageTranslate.map(lang => {if(lang.contactId === currentContactId[0])return lang.lang})}) {getKeyByValue(languageOptions)}</h3>
+                <ul className="chats" ref={messageEl}>
                 {
-                    // 現在アクティブなチャットセッションのメッセージのみを表示
-                    Chats.map(chat => {
-                        if (chat.contactId === currentContactId[0])
-                            return <Message chat={chat} user={agentUsername} />
-                    })
-                }
-            </ul>
-            <form className="input" onSubmit={handleSubmit}>
-                <input
-                    ref={input}
-                    maxLength="1024"
-                    type="text"
-                    value={newMessage}
-                    onChange={e => setNewMessage(e.target.value)}
-                />
-                <input type="submit" value="Submit" />
-            </form>
-        </div>
+                        // iterate over the Chats, and only display the messages for the currently active chat session
+                        Chats.map(chat => {
+                            if(chat.contactId === currentContactId[0])
+                                return<Message chat={chat} user={agentUsername} />
+                            }
+                        )
+                    }
+                </ul>
+                <form className="input" onSubmit={handleSubmit} >
+                    <input
+                          ref={input}
+                          maxLength = "1024"
+                          type="text"
+                          value={newMessage}
+                          onChange={e => setNewMessage(e.target.value)}
+                        />
+                    <input type="submit" value="Submit" />
+                </form>
+ 
+            </div>
     );
 };
+
 
 export default Chatroom;
