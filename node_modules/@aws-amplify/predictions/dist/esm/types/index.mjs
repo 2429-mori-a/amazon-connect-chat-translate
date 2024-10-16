@@ -1,0 +1,2 @@
+export { isConvertBytesSource, isFileSource, isIdentifyBytesSource, isIdentifyCelebrities, isIdentifyEntitiesInput, isIdentifyFromCollection, isIdentifyLabelsInput, isIdentifyTextInput, isInterpretTextInput, isInterpretTextOthers, isSpeechToTextInput, isStorageSource, isTextToSpeechInput, isTranslateTextInput, isValidConvertInput, isValidIdentifyInput, isValidInterpretInput } from './Predictions.mjs';
+//# sourceMappingURL=index.mjs.map
