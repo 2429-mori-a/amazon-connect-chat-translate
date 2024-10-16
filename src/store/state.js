@@ -23,7 +23,7 @@ const { setGlobalState, useGlobalState } = createGlobalState({
         'Danish':'da',
         'Dari':'fa-AF',
         'Dutch':'nl',
-        'English':'en',
+        'English':'ja',
         'Estonian':'et',
         'Farsi (Persian)':'fa',
         'Filipino Tagalog':'tl',

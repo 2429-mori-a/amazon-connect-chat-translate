@@ -62,7 +62,7 @@ It will take about 10 minutes for the application to deploy. After successful de
     * Go to https://console.aws.amazon.com/translate/home?#terminology
     * Click on the radio button next to `connectChatTranslate`
     * Download the CSV
-    * Edit the CSV, by adding additional rows. 'en' as the source language and using the columns for the destination language (Feel free to add additional languages in column D onwards)
+    * Edit the CSV, by adding additional rows. 'ja' as the source language and using the columns for the destination language (Feel free to add additional languages in column D onwards)
     * <img src="./artifacts/connectChatTranslate.png" width="50%">
     * Update the `connectChatTranslate` custom terminologies with the updated CSV
   * For more information visit: https://docs.aws.amazon.com/transcribe/latest/dg/how-vocabulary.html
@@ -72,7 +72,7 @@ It will take about 10 minutes for the application to deploy. After successful de
 
 * The web app looks for a contact attribute of `x_lang` if set then the language will be set accordingly. (Supported languages for translation: https://docs.aws.amazon.com/translate/latest/dg/what-is.html)
 * If no `x_lang` contact attribute is set, the FIRST message from the customer will be used to perform language detection using Amazon Comprehend. (Supported languages for detection: https://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html)
-* Agent side is hardcoded to `'en'`
+* Agent side is hardcoded to `'ja'`
 
 
 ### Costs
