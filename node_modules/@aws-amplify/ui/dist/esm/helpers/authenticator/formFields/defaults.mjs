@@ -25,7 +25,7 @@ const getAliasDefaultFormField = (state) => {
     };
 };
 /** Reusable confirmation code form fields. */
-const getConfirmationCodeFormFields = (state) => ({
+const getConfirmationCodeFormFields = (_) => ({
     confirmation_code: {
         ...getDefaultFormField('confirmation_code'),
         label: 'Code *',
@@ -61,12 +61,13 @@ const getSignUpFormFields = (state) => {
         }
         else {
             // There's a `custom:*` attribute or one we don't already have an implementation for
+            // eslint-disable-next-line no-console
             console.debug(`Authenticator does not have a default implementation for ${fieldName}. Customize SignUp FormFields to add your own.`);
         }
     }
     return formField;
 };
-const getConfirmSignUpFormFields = (state) => ({
+const getConfirmSignUpFormFields = (_) => ({
     confirmation_code: {
         ...getDefaultFormField('confirmation_code'),
         placeholder: 'Enter your code',
@@ -111,6 +112,7 @@ const getForceNewPasswordFormFields = (state) => {
         }
         else {
             // There's a `custom:*` attribute or one we don't already have an implementation for
+            // eslint-disable-next-line no-console
             console.debug(`Authenticator does not have a default implementation for ${fieldName}. Customize ForceNewPassword FormFields to add your own.`);
         }
     }

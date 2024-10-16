@@ -55,7 +55,7 @@ const defaultServices = {
     handleForgotPasswordSubmit: confirmResetPassword,
     handleForgotPassword: resetPassword,
     // Validation hooks for overriding
-    async validateCustomSignUp(formData, touchData) { },
+    async validateCustomSignUp(_, __) { },
     async validateFormPassword(formData, touchData, passwordSettings) {
         const { password } = formData;
         const { password: touched_password } = touchData;
@@ -105,7 +105,7 @@ const defaultServices = {
             };
         }
     },
-    async validatePreferredUsername(formData, touchData) { },
+    async validatePreferredUsername(_, __) { },
 };
 
 export { defaultServices };
